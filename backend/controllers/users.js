@@ -1,7 +1,10 @@
 const User = require('../models/user');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+require('dotenv').config();
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 //const NotFoundError = require('./error/not-found-error');
 
 const randomString = crypto.randomBytes(16).toString('hex');
@@ -23,10 +26,13 @@ const getUsersInfo = (req, res) => {
 };
 
 const getCurrentUser = (req, res) => {
-  User.findOne({ email })
-    .then((user) => res.status(200).send(user))
+  User.findById({ _id: req.user._id })
+    .then((user) => res.status(200).send({ user }))
     .catch((err) => {
-      return res.status(500).send({ message: err.message });
+      if (err.message === 'No users found') {
+        res.status(404).send({ message: 'No users found' });
+      }
+      res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
 
@@ -54,7 +60,7 @@ const createUser = (req, res) => {
     .hash(password, 10)
     .then((hash) => User.create({ name, about, avatar, email, password: hash }))
     .then((user) => {
-      return res.status(201).send(user._id, user.email);
+      return res.status(201).send(user);
     })
     .catch((err) => {
       const ERROR__CODE = 400;
@@ -71,9 +77,15 @@ const login = (req, res) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, randomString, {
-        expiresIn: '7d',
-      });
+      const token = jwt.sign(
+        { _id: user._id },
+        process.env.NODE_ENV === 'production'
+          ? process.env.JWT_SECRET
+          : 'dev-secret',
+        {
+          expiresIn: '7d',
+        }
+      );
 
       return res.send({ token });
     })

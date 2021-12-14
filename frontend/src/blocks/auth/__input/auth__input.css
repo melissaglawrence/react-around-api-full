@@ -1,0 +1,23 @@
+.auth__input {
+  border: none;
+  background-color: black;
+  color: white;
+  border-bottom: 2px solid white;
+  outline: none;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  margin: 0 0 30px;
+  padding-bottom: 9px;
+  display: block;
+  max-width: 358px;
+  width: 100%;
+}
+
+.auth__input:focus {
+  border: none;
+  background-color: black;
+  color: white;
+  border-bottom: 2px solid white;
+  outline: none;
+}

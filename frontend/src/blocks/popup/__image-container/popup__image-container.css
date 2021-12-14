@@ -1,0 +1,21 @@
+.popup__image-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: fit-content;
+  margin: 90px auto;
+  position: relative;
+}
+
+@media screen and (max-width: 820px) {
+  .popup__image-container {
+    margin: 90px 40px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .popup__image-container {
+    margin-top: 136px;
+    height: 299px;
+  }
+}

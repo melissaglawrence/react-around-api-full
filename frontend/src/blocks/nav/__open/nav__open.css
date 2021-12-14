@@ -1,0 +1,10 @@
+@media screen and (max-width: 580px) {
+  .nav__open {
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+}

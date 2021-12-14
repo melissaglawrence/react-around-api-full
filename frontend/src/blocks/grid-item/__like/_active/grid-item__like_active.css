@@ -1,0 +1,9 @@
+.grid-item__like_active {
+  background-image: url(../../../../images/likeActive.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  border: none;
+  height: 19px;
+  width: 21px;
+}

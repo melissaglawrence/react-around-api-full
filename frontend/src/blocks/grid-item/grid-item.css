@@ -1,0 +1,10 @@
+.grid-item {
+  width: 282px;
+  background: white;
+  color: black;
+  list-style: none;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 0 auto;
+  position: relative;
+}

@@ -1,0 +1,7 @@
+.grid-item__trash_active {
+  display: block;
+}
+
+.grid-item__trash_active:hover {
+  opacity: 0.6;
+}

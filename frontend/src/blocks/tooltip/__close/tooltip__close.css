@@ -1,0 +1,11 @@
+@media screen and (max-width: 580px) {
+  .tooltip__close {
+    height: 30px;
+    width: 30px;
+    background-size: auto;
+    right: 20px;
+    right: 125px;
+    top: -50px;
+    margin-bottom: 20px;
+  }
+}

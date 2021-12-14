@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const auth = (req, res, next) => {
-  const { auth } = req.headers;
+  const auth = req.headers['authorization'];
   if (!auth || !auth.startsWith('Bearer ')) {
     return res.status(401).send({ message: 'Not authorized' });
   }
@@ -9,7 +10,10 @@ const auth = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, '');
+    payload = jwt.verify(
+      token,
+      NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret'
+    );
   } catch {
     return res.status(403).send({ message: 'Not authorized' });
   }
@@ -17,4 +21,4 @@ const auth = (req, res, next) => {
   next();
 };
 
-module.exports = auth;
+module.exports = { auth };

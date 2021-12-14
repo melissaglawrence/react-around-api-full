@@ -1,0 +1,5 @@
+@media screen and (max-width: 580px) {
+  .header__open {
+    padding-top: 142px;
+  }
+}

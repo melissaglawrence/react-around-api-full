@@ -1,0 +1,19 @@
+.popup__info {
+  max-width: 358px;
+  width: 100%;
+  color: black;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 580px) {
+  .popup__info {
+    width: 238px;
+  }
+}

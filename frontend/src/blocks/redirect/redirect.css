@@ -1,0 +1,13 @@
+.redirect {
+  font-size: 14px;
+  line-height: 17px;
+  display: flex;
+  color: white;
+  align-items: center;
+  justify-content: center;
+}
+@media screen and (max-width: 580px) {
+  .redirect {
+    margin: 0 auto 40px;
+  }
+}

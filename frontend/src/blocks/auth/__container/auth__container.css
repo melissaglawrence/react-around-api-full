@@ -1,0 +1,10 @@
+.auth__container {
+  max-width: 430px;
+  width: 100%;
+}
+
+@media screen and (max-width: 580px) {
+  .auth__container {
+    max-width: 282px;
+  }
+}

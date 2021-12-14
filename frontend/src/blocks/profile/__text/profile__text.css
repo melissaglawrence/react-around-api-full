@@ -1,0 +1,23 @@
+.profile__text {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin: 0 0 0 30px;
+  width: 100%;
+}
+
+@media screen and (max-width: 780px) {
+  .profile__text {
+    max-width: 240px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .profile__text {
+    margin: 30px auto 36px;
+  }
+}
