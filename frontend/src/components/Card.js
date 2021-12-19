@@ -4,13 +4,13 @@ import CurrentUserContext from '../contexts/CurrentUserContext';
 const Card = (props) => {
   const currentUser = React.useContext(CurrentUserContext);
 
-  const isOwn = props.card.owner._id === currentUser._id;
+  const isOwn = props.card.owner === currentUser._id;
 
   const cardDeleteButtonClassName = `grid-item__trash button ${
     isOwn ? 'grid-item__trash_active' : ''
   }`;
 
-  const isLiked = props.card.likes.some((i) => i._id === currentUser._id);
+  const isLiked = props.card.likes.some((i) => i === currentUser._id);
 
   const cardLikeButtonClassName = `grid-item__like button ${
     isLiked ? 'grid-item__like_active' : ''

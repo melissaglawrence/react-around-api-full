@@ -26,7 +26,6 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [login, setLogin] = useState(false);
-  const [userData, setUserData] = useState({});
   const [message, setMessage] = useState('');
   const history = useHistory();
 
@@ -52,92 +51,6 @@ const App = () => {
     setIsTooltipOpen(false);
   };
 
-  //GET INITIAL DATA
-  useEffect(() => {
-    api
-      .getInitialCards()
-      .then((res) => {
-        setCards(res.map((card) => card));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  useEffect(() => {
-    api
-      .getUserInfo()
-      .then((userInfo) => {
-        setCurrentUser(userInfo);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  //CARD FUNCTIONALITY
-  const handleCardLike = (card) => {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
-    api
-      .changeLikeCardStatus(card._id, isLiked)
-      .then((newCard) => {
-        setCards((state) =>
-          state.map((c) => (c._id === card._id ? newCard : c)),
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleCardDelete = (card) => {
-    api
-      .deleteCard(card._id)
-      .then(() => {
-        setCards(cards.filter((c) => c._id !== card._id));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleAddPlaceSubmit = (data) => {
-    api
-      .createNewCard(data)
-      .then((newCard) => {
-        setCards([newCard, ...cards]);
-        setIsAddPlacePopupOpen(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  //USER FUNCTIONALITY
-  const handleUpdateUser = ({ name, about }) => {
-    api
-      .updateUserInfo(name, about)
-      .then((user) => {
-        setCurrentUser(user);
-        setIsEditProfilePopupOpen(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleUpdateAvatar = ({ avatar }) => {
-    api
-      .userAvatar(avatar)
-      .then((userInfo) => {
-        setCurrentUser(userInfo);
-        setIsEditAvatarPopupOpen(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   //TOKENCHECK
   const jwt = localStorage.getItem('jwt');
   const email = localStorage.getItem('user');
@@ -147,7 +60,7 @@ const App = () => {
         .getUser(jwt)
         .then((data) => {
           if (data) {
-            setUserData(email);
+            setCurrentUser(data.user);
             setLogin(true);
             history.push('/');
           } else {
@@ -159,7 +72,7 @@ const App = () => {
         });
     }
     return;
-  }, [history, jwt, email]);
+  }, [history, jwt]);
 
   useEffect(() => {
     tokenCheck();
@@ -174,6 +87,7 @@ const App = () => {
           return setMessage('the user with the specified email not found');
         }
         if (data) {
+          tokenCheck();
           setMessage('');
           setLogin(true);
           history.push('/');
@@ -214,6 +128,92 @@ const App = () => {
       });
   };
 
+  //GET INITIAL DATA
+  useEffect(() => {
+    api
+      .getInitialCards(jwt)
+      .then((res) => {
+        setCards(res.map((card) => card));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [jwt]);
+
+  useEffect(() => {
+    api
+      .getUserInfo(jwt)
+      .then((data) => {
+        setCurrentUser(data.user);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [jwt]);
+
+  //CARD FUNCTIONALITY
+  const handleCardLike = (card) => {
+    const isLiked = card.likes.some((i) => i === currentUser._id);
+    api
+      .changeLikeCardStatus(card._id, isLiked, jwt)
+      .then((newCard) => {
+        setCards((oldCards) =>
+          oldCards.map((c) => (c._id === card._id ? newCard.card : c)),
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleCardDelete = (card) => {
+    api
+      .deleteCard(card._id, jwt)
+      .then(() => {
+        setCards(cards.filter((c) => c._id !== card._id));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleAddPlaceSubmit = (data) => {
+    api
+      .createNewCard(data, jwt)
+      .then((newCard) => {
+        setCards([newCard.data, ...cards]);
+        setIsAddPlacePopupOpen(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  //USER FUNCTIONALITY
+  const handleUpdateUser = ({ name, about }) => {
+    api
+      .updateUserInfo(name, about, jwt)
+      .then((data) => {
+        setCurrentUser(data.user);
+        setIsEditProfilePopupOpen(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleUpdateAvatar = ({ avatar }) => {
+    api
+      .userAvatar(avatar, jwt)
+      .then((data) => {
+        setCurrentUser(data.user);
+        setIsEditAvatarPopupOpen(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <CurrentUserContext.Provider value={currentUser}>
@@ -230,7 +230,7 @@ const App = () => {
               message='Sign Out'
               login={login}
               signOut={handleSignOut}
-              //userEmail={userData.email}
+              userEmail={email}
             />
             <Main
               cards={cards}

@@ -8,6 +8,8 @@ const cors = require('cors');
 
 const { celebrate, Joi } = require('celebrate');
 
+const validator = require('validator');
+
 const { errors } = require('celebrate');
 
 const { requestLogger, errorLogger } = require('./middleware/logger');
@@ -21,6 +23,7 @@ const cardsRouter = require('./routes/cards');
 const { auth } = require('./middleware/auth');
 
 const { corsOptions } = require('./middleware/cors');
+const { validate } = require('./models/user');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -32,7 +35,22 @@ app.use(express.json());
 
 app.use(requestLogger);
 
+const validateUrl = (value, helpers) => {
+  if (validator.isURL(value)) {
+    return value;
+  }
+  return helpers.error('string.url');
+};
+
 app.use(cors());
+
+app.options('*', cors());
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Server will crash now');
+  }, 0);
+});
 
 app.post(
   '/signup',
@@ -41,7 +59,7 @@ app.post(
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
-      avatar: Joi.string().uri(),
+      avatar: Joi.string().custom(validateUrl),
       email: Joi.string().email().required(),
       password: Joi.string().required(),
     }),
@@ -70,11 +88,7 @@ app.use(
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
-      avatar: Joi.string().uri(),
-      email: Joi.string()
-        .email({ tlds: { allow: false } })
-        .required(),
-      password: Joi.string().required(),
+      avatar: Joi.string().custom(validateUrl),
     }),
   }),
   usersRouter
@@ -85,8 +99,8 @@ app.use(
   corsOptions,
   celebrate({
     body: Joi.object().keys({
-      name: Joi.string().min(2).max(30).required(),
-      link: Joi.string().uri().required(),
+      name: Joi.string().min(2).max(30),
+      link: Joi.string().custom(validateUrl),
     }),
   }),
   cardsRouter
@@ -97,12 +111,15 @@ app.use(errorLogger);
 app.use(errors());
 
 app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
   if (err.joi) {
     return res.status(400).json({
       error: err.joi.message,
     });
   }
-  res.status(500).send({ message: 'An error occurred on the server' });
+  res.status(statusCode).send({
+    message: statusCode === 500 ? 'An error occurred on the server' : message,
+  });
 });
 
 app.listen(PORT, () => {

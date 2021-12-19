@@ -9,7 +9,9 @@ const EditAvatarPopup = (props) => {
     props.onUpdateAvatar({
       avatar: avatarRef.current.value,
     });
+    e.target.reset();
   };
+
   return (
     <PopupWithForm
       isOpen={props.isOpen}

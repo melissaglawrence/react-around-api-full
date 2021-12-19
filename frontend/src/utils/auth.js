@@ -1,6 +1,6 @@
 const BASE_URL =
   process.env.NODE_ENV === 'production'
-    ? 'http://melissalawrence.students.nomoreparties.site/'
+    ? 'http://api.melissalawrence.students.nomoreparties.site/'
     : 'http://localhost:3000';
 
 const handleResponse = (res) => {
@@ -45,12 +45,12 @@ const getUser = (token) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      authorization: `Bearer ${token}`,
     },
   })
     .then(handleResponse)
     .then((data) => {
-      localStorage.setItem('user', data.email);
+      localStorage.setItem('user', data.user.email);
       return data;
     });
 };

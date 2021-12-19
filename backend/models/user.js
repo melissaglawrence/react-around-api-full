@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const isEmail = require('validator/lib/isEmail');
+const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -18,7 +18,8 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     validate: {
-      validator: (v) => /^(https:|http:|www\.)\S*/gi.test(v),
+      validator: (v) => validator.isURL(v),
+      message: 'Not a valid Url',
     },
     defalut: 'https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg',
   },
@@ -27,8 +28,8 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     validate: {
-      validator: (v) => isEmail(v),
-      message: 'Wrong email format',
+      validator: (v) => validator.isEmail(v),
+      message: 'Not a valid email',
     },
   },
   password: {
