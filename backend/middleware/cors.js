@@ -1,7 +1,7 @@
 const allowedOrigins = [
   'http://localhost:3001',
-  'https://melissalawrence.students.nomoreparties.site/',
-  'https://www.melissalawrence.students.nomoreparties.site/',
+  'http://melissalawrence.students.nomoreparties.site',
+  'http://www.melissalawrence.students.nomoreparties.site',
 ];
 
 const allowedMethods = ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'];
@@ -11,7 +11,7 @@ const corsOptions = (req, res, next) => {
   const { method } = req.method;
   const requestHeaders = req.headers['Access-Control-Request-Headers'];
   if (allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', origin);
   }
   if (method === 'OPTIONS') {
     res.header('Access-Control-Allow-Methods', allowedMethods);
