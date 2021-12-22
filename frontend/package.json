@@ -21,7 +21,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "nodemon index.js",
-    "deploy": "npm run build && scp -r ./build/* melissalawrence@domainname.students.nomoreparties.site:/home/melissalawrence/around-frontend"
+    "deploy": "npm run build && scp -r ./build/* melissaglawrence8@melissalawrence.students.nomoreparties.site:/home/melissaglawrence8/around-frontend"
   },
   "eslintConfig": {
     "extends": [
@@ -56,6 +56,5 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/melissaglawrence/around-react/issues"
-  },
-  "homepage": "https://melissaglawrence.github.io/around-react"
+  }
 }
