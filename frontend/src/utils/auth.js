@@ -1,6 +1,6 @@
 const BASE_URL =
   process.env.NODE_ENV === 'production'
-    ? 'http://api.melissalawrence.students.nomoreparties.site'
+    ? 'https://api.melissalawrence.students.nomoreparties.site'
     : 'http://localhost:3000';
 
 const handleResponse = (res) => {

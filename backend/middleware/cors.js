@@ -1,7 +1,7 @@
 const allowedOrigins = [
   'http://localhost:3001',
-  'http://melissalawrence.students.nomoreparties.site',
-  'http://www.melissalawrence.students.nomoreparties.site',
+  'https://melissalawrence.students.nomoreparties.site',
+  'https://www.melissalawrence.students.nomoreparties.site',
 ];
 
 const allowedMethods = ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'];
