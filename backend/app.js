@@ -56,6 +56,7 @@ app.get('/crash-test', () => {
 
 app.post(
   '/signup',
+  corsOptions,
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
@@ -70,6 +71,7 @@ app.post(
 
 app.post(
   '/signin',
+  corsOptions,
   celebrate({
     body: Joi.object().keys({
       email: Joi.string().email().required(),
@@ -83,6 +85,7 @@ app.use(auth);
 
 app.use(
   '/users',
+  corsOptions,
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
@@ -95,6 +98,7 @@ app.use(
 
 app.use(
   '/cards',
+  corsOptions,
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
