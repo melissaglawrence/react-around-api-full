@@ -11,7 +11,7 @@ const corsOptions = (req, res, next) => {
   const { method } = req.method;
   const requestHeaders = req.headers['Access-Control-Request-Headers'];
   if (allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Origin', '*');
   }
   if (method === 'OPTIONS') {
     res.header('Access-Control-Allow-Methods', allowedMethods);
