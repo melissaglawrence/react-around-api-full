@@ -25,7 +25,6 @@ const cardsRouter = require('./routes/cards');
 const { auth } = require('./middleware/auth');
 
 const { corsOptions } = require('./middleware/cors');
-const { validate } = require('./models/user');
 
 const { PORT = 3000 } = process.env;
 const app = express();

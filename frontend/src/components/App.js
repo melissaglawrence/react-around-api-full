@@ -101,6 +101,7 @@ const App = () => {
 
   const handleSignOut = () => {
     localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
     history.push('/signin');
   };
 
