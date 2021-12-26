@@ -7,7 +7,12 @@ const getCards = (req, res, next) => {
     .orFail(() => {
       throw new RequestError('Bad request');
     })
-    .then((cards) => res.status(200).send(cards))
+    .then((cards) => {
+      if (!cards) {
+        throw new AuthError('Not authorized');
+      }
+      res.status(200).send(cards);
+    })
     .catch(next);
 };
 
@@ -40,7 +45,6 @@ const likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } },
     { new: true }
   )
-
     .orFail(() => {
       throw new RequestError('Bad request');
     })

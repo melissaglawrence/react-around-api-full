@@ -10,8 +10,10 @@ const login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      if (!user) {
-        throw new RequestError('Bad request');
+      if (!email || !password) {
+        throw new RequestError('Missing Required fields');
+      } else if (!user) {
+        throw new NotFoundError('User not found');
       }
       const token = jwt.sign(
         { _id: user._id },
@@ -34,7 +36,7 @@ const createUser = (req, res, next) => {
     .then((hash) => {
       User.create({ name, about, avatar, email, password: hash }).then(
         (user) => {
-          res.status(200).send({ _id: user._id });
+          res.status(201).send({ _id: user._id });
         }
       );
     })
