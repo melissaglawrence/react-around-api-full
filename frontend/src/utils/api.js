@@ -1,7 +1,6 @@
 class Api {
-  constructor(baseUrl, authToken) {
+  constructor(baseUrl) {
     this._baseUrl = baseUrl;
-    this._authToken = authToken;
   }
 
   _handleResponse = (res) => {

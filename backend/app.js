@@ -2,7 +2,9 @@ const express = require('express');
 
 const mongoose = require('mongoose');
 
-require('dotenv').config();
+const path = require('path');
+
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const cors = require('cors');
 
@@ -23,7 +25,6 @@ const cardsRouter = require('./routes/cards');
 const { auth } = require('./middleware/auth');
 
 const { corsOptions } = require('./middleware/cors');
-const { validate } = require('./models/user');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -54,6 +55,7 @@ app.get('/crash-test', () => {
 
 app.post(
   '/signup',
+  corsOptions,
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
@@ -68,6 +70,7 @@ app.post(
 
 app.post(
   '/signin',
+  corsOptions,
   celebrate({
     body: Joi.object().keys({
       email: Joi.string().email().required(),
@@ -81,6 +84,7 @@ app.use(auth);
 
 app.use(
   '/users',
+  corsOptions,
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
@@ -93,6 +97,7 @@ app.use(
 
 app.use(
   '/cards',
+  corsOptions,
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),

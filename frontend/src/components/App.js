@@ -101,6 +101,7 @@ const App = () => {
 
   const handleSignOut = () => {
     localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
     history.push('/signin');
   };
 
@@ -152,19 +153,20 @@ const App = () => {
   }, [jwt]);
 
   //CARD FUNCTIONALITY
-  const handleCardLike = (card) => {
+
+  function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i === currentUser._id);
     api
       .changeLikeCardStatus(card._id, isLiked, jwt)
       .then((newCard) => {
-        setCards((oldCards) =>
-          oldCards.map((c) => (c._id === card._id ? newCard.card : c)),
+        setCards((state) =>
+          state.map((c) => (c._id === card._id ? newCard.card : c)),
         );
       })
       .catch((err) => {
         console.log(err);
       });
-  };
+  }
 
   const handleCardDelete = (card) => {
     api

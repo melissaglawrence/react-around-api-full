@@ -35,21 +35,27 @@ const deleteCard = (req, res, next) => {
 };
 
 const likeCard = (req, res, next) => {
-  Card.findByIdAndUpdate(req.params.id, { $addToSet: { likes: req.user._id } })
+  Card.findByIdAndUpdate(
+    req.params.id,
+    { $addToSet: { likes: req.user._id } },
+    { new: true }
+  )
+
     .orFail(() => {
       throw new RequestError('Bad request');
     })
-    .then((likes) => {
-      if (!likes) {
-        throw new NotFoundError('No card with matching ID found');
-      }
-      res.status(200).send({ card: likes });
+    .then((like) => {
+      res.status(200).send({ card: like });
     })
     .catch(next);
 };
 
 const dislikeCard = (req, res, next) => {
-  Card.findByIdAndUpdate(req.params.id, { $pull: { likes: req.user._id } })
+  Card.findByIdAndUpdate(
+    req.params.id,
+    { $pull: { likes: req.user._id } },
+    { new: true }
+  )
     .orFail(() => {
       throw new RequestError('Bad request');
     })
@@ -58,6 +64,7 @@ const dislikeCard = (req, res, next) => {
     })
     .catch(next);
 };
+
 module.exports = {
   getCards,
   deleteCard,
