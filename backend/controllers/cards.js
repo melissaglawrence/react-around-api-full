@@ -40,6 +40,11 @@ const deleteCard = (req, res, next) => {
       }
       res.status(200).send({ card });
     })
+    .catch((err) => {
+      if (err.name === 'CastError' || err.statusCode === 400) {
+        throw new RequestError('No card with that id found');
+      }
+    })
     .catch(next);
 };
 
@@ -58,6 +63,11 @@ const likeCard = (req, res, next) => {
       }
       res.status(200).send({ card: like });
     })
+    .catch((err) => {
+      if (err.name === 'CastError' || err.statusCode === 400) {
+        throw new RequestError('No card with that id found');
+      }
+    })
     .catch(next);
 };
 
@@ -75,6 +85,11 @@ const dislikeCard = (req, res, next) => {
         throw new RequestError('No card with that id found');
       }
       res.status(200).send({ card: dislike });
+    })
+    .catch((err) => {
+      if (err.name === 'CastError' || err.statusCode === 400) {
+        throw new RequestError('No card with that id found');
+      }
     })
     .catch(next);
 };

@@ -31,6 +31,11 @@ const login = (req, res, next) => {
       );
       return res.send({ token });
     })
+    .catch((err) => {
+      if (err) {
+        throw new AuthError('Not authorized');
+      }
+    })
     .catch(next);
 };
 
