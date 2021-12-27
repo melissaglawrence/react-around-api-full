@@ -1,16 +1,18 @@
 const Card = require('../models/card');
 
-const { RequestError, AuthError, NotFoundError } = require('../error/errors');
+const {
+  RequestError,
+  AuthError,
+  NotFoundError,
+  ForbiddenError,
+} = require('../error/errors');
 
 const getCards = (req, res, next) => {
   Card.find({})
     .orFail(() => {
-      throw new RequestError('Bad request');
+      throw new NotFoundError('No cards found');
     })
     .then((cards) => {
-      if (!cards) {
-        throw new AuthError('Not authorized');
-      }
       res.status(200).send(cards);
     })
     .catch(next);
@@ -20,7 +22,7 @@ const createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
     .then((card) => {
-      res.status(200).send({ data: card });
+      res.status(201).send({ data: card });
     })
     .catch(next);
 };
@@ -28,11 +30,13 @@ const createCard = (req, res, next) => {
 const deleteCard = (req, res, next) => {
   Card.findByIdAndDelete(req.params.id)
     .orFail(() => {
-      throw new RequestError('Bad request');
+      throw new NotFoundError('No cards found');
     })
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('No card with matching ID found');
+        throw new RequestError('No card with that id found');
+      } else if (card.owner.toString() !== req.user._id) {
+        throw new ForbiddenError('Cannot delete other users cards');
       }
       res.status(200).send({ card });
     })
@@ -46,9 +50,12 @@ const likeCard = (req, res, next) => {
     { new: true }
   )
     .orFail(() => {
-      throw new RequestError('Bad request');
+      throw new NotFoundError('No cards found');
     })
     .then((like) => {
+      if (!like) {
+        throw new RequestError('No card with that id found');
+      }
       res.status(200).send({ card: like });
     })
     .catch(next);
@@ -61,9 +68,12 @@ const dislikeCard = (req, res, next) => {
     { new: true }
   )
     .orFail(() => {
-      throw new RequestError('Bad request');
+      throw new NotFoundError('No cards found');
     })
     .then((dislike) => {
+      if (!dislike) {
+        throw new RequestError('No card with that id found');
+      }
       res.status(200).send({ card: dislike });
     })
     .catch(next);

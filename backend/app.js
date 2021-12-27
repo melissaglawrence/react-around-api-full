@@ -8,6 +8,10 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const cors = require('cors');
 
+const helmet = require('helmet');
+
+const { limiter } = require('./middleware/limiter');
+
 const { celebrate, Joi } = require('celebrate');
 
 const validator = require('validator');
@@ -43,7 +47,11 @@ const validateUrl = (value, helpers) => {
   return helpers.error('string.url');
 };
 
+app.use(limiter);
+
 app.use(cors());
+
+app.use(helmet());
 
 app.options('*', cors());
 

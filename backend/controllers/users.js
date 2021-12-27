@@ -4,7 +4,12 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const { NODE_ENV, JWT_SECRET } = process.env;
-const { RequestError, AuthError, NotFoundError } = require('../error/errors');
+const {
+  RequestError,
+  AuthError,
+  NotFoundError,
+  ConflictError,
+} = require('../error/errors');
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
@@ -13,7 +18,7 @@ const login = (req, res, next) => {
       if (!email || !password) {
         throw new RequestError('Missing Required fields');
       } else if (!user) {
-        throw new NotFoundError('User not found');
+        throw new AuthError('User not found');
       }
       const token = jwt.sign(
         { _id: user._id },
@@ -31,6 +36,13 @@ const login = (req, res, next) => {
 
 const createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
+  User.findOne({ email: email })
+    .then((user) => {
+      if (user) {
+        throw new ConflictError('User already exists');
+      }
+    })
+    .catch(next);
   bcrypt
     .hash(password, 10)
     .then((hash) => {
@@ -57,7 +69,7 @@ const getCurrentUser = (req, res, next) => {
 const getUsersInfo = (req, res, next) => {
   User.find({})
     .orFail(() => {
-      throw new RequestError('Bad request');
+      throw new NotFoundError('User not found');
     })
     .then((user) => {
       if (!user) {
@@ -71,11 +83,11 @@ const getUsersInfo = (req, res, next) => {
 const getUsersId = (req, res, next) => {
   User.findById(req.params.id)
     .orFail(() => {
-      throw new RequestError('Bad request');
+      throw new NotFoundError('User not found');
     })
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('No user with matching ID found');
+        throw new RequestError('No user with matching ID found');
       }
       res.status(200).send(user);
     })
@@ -90,11 +102,11 @@ const updateUser = (req, res, next) => {
     { new: true, runValidators: true }
   )
     .orFail(() => {
-      throw new RequestError('Bad request');
+      throw new NotFoundError('User not found');
     })
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('No user with matching ID found');
+        throw new RequestError('No user with matching ID found');
       }
       res.status(200).send({ user });
     })
@@ -114,11 +126,11 @@ const updateUserAvatar = (req, res, next) => {
     }
   )
     .orFail(() => {
-      throw new RequestError('Bad request');
+      throw new NotFoundError('User not found');
     })
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('No user with matching ID found');
+        throw new RequestError('No user with matching ID found');
       }
       res.status(200).send({ user: user });
     })

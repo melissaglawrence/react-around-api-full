@@ -12,6 +12,13 @@ class AuthError extends Error {
   }
 }
 
+class ForbiddenError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 403;
+  }
+}
+
 class NotFoundError extends Error {
   constructor(message) {
     super(message);
@@ -19,4 +26,17 @@ class NotFoundError extends Error {
   }
 }
 
-module.exports = { RequestError, AuthError, NotFoundError };
+class ConflictError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 409;
+  }
+}
+
+module.exports = {
+  RequestError,
+  AuthError,
+  ForbiddenError,
+  NotFoundError,
+  ConflictError,
+};

@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+const { AuthError } = require('../error/errors');
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const auth = (req, res, next) => {
@@ -18,8 +20,8 @@ const auth = (req, res, next) => {
         ? process.env.JWT_SECRET
         : 'dev-secret'
     );
-  } catch {
-    return res.status(403).send({ message: 'Not authorized' });
+  } catch (err) {
+    throw new AuthError('Not authorized');
   }
   req.user = payload;
   next();
