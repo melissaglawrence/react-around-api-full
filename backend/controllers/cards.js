@@ -34,7 +34,7 @@ const deleteCard = (req, res, next) => {
     })
     .then((card) => {
       if (!card) {
-        throw new RequestError('No card with that id found');
+        throw new RequestError('Invalid id');
       } else if (card.owner.toString() !== req.user._id) {
         throw new ForbiddenError('Cannot delete other users cards');
       }
@@ -43,6 +43,8 @@ const deleteCard = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError' || err.statusCode === 400) {
         throw new RequestError('No card with that id found');
+      } else {
+        next(err);
       }
     })
     .catch(next);
@@ -59,13 +61,15 @@ const likeCard = (req, res, next) => {
     })
     .then((like) => {
       if (!like) {
-        throw new RequestError('No card with that id found');
+        throw new RequestError('Invalid id');
       }
       res.status(200).send({ card: like });
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.statusCode === 400) {
         throw new RequestError('No card with that id found');
+      } else {
+        next(err);
       }
     })
     .catch(next);
@@ -82,13 +86,15 @@ const dislikeCard = (req, res, next) => {
     })
     .then((dislike) => {
       if (!dislike) {
-        throw new RequestError('No card with that id found');
+        throw new RequestError('Invalid id');
       }
       res.status(200).send({ card: dislike });
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.statusCode === 400) {
         throw new RequestError('No card with that id found');
+      } else {
+        next(err);
       }
     })
     .catch(next);
