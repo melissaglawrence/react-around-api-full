@@ -4,7 +4,7 @@ This repository contains the full API of "Around the U.S." project that features
 
 # Link to site
 
-https://www.melissalawrence.students.nomoreparties.site/
+https://aroundusproject.students.nomoreparties.sbs
 
 # Tech
 
