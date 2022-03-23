@@ -21,7 +21,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "nodemon index.js",
-    "deploy": "npm run build && scp -r ./build/* melissaglawrence8@melissalawrence.students.nomoreparties.site:/home/melissaglawrence8/around-frontend"
+    "deploy": "npm run build && scp -r ./build/* melissaglawrence8@aroundusproject.students.nomoreparties.sbs:/home/melissaglawrence8/around-frontend"
   },
   "eslintConfig": {
     "extends": [
