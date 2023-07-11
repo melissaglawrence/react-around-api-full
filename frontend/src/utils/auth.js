@@ -1,7 +1,7 @@
 const BASE_URL =
   process.env.NODE_ENV === 'production'
     ? 'https://api.aroundusproject.students.nomoreparties.sbs'
-    : 'http://localhost:3000';
+    : 'http://localhost:3005';
 
 const handleResponse = (res) => {
   if (res.ok) {
