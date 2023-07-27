@@ -2,10 +2,6 @@
 
 This repository contains the full API of "Around the U.S." project that features user authorization and user registration and handles cards and users.
 
-# Link to site
-
-https://aroundusproject.students.nomoreparties.sbs
-
 # Tech
 
 Created using React and express.
