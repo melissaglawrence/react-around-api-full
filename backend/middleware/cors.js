@@ -1,7 +1,6 @@
 const allowedOrigins = [
   'http://localhost:3001',
-  'https://melissalawrence.students.nomoreparties.site',
-  'https://www.melissalawrence.students.nomoreparties.site',
+  'https://insta-mock.onrender.com',
 ];
 
 const allowedMethods = ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'];
