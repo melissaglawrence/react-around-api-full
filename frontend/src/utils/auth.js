@@ -1,6 +1,6 @@
 const BASE_URL =
   process.env.NODE_ENV === 'production'
-    ? 'https://insta-mock.onrender.com'
+    ? 'https://insta-mock-api.onrender.com'
     : 'http://localhost:3000';
 
 const handleResponse = (res) => {
