@@ -32,13 +32,21 @@ const { corsOptions } = require('./middleware/cors');
 
 const { PORT = 3000 } = process.env;
 const app = express();
-mongoose.connect('mongodb://localhost:27017/arounddb');
+mongoose.connect(process.env.MY_MONGO_URI);
 
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
 
 app.use(requestLogger);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  );
+}
 
 const validateUrl = (value, helpers) => {
   if (validator.isURL(value)) {
