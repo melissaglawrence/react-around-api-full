@@ -5,13 +5,9 @@
   "main": "app.js",
   "scripts": {
     "test": "jest",
-    "dev": "concurrently\"npm run server\"\"npm run client\"",
+    "dev": "nodemon app.js",
     "start": "node app.js",
-    "lint": "npx eslint .",
-    "server": "nodemon app.js",
-    "client": "npm start --prefix client",
-    "clientinstall": "npm install --prefix client",
-    "render-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "lint": "npx eslint ."
   },
   "repository": {
     "type": "git",
