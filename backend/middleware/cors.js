@@ -1,6 +1,7 @@
 const allowedOrigins = [
   'http://localhost:3001',
   'https://insta-mock.onrender.com',
+  'https://insta-mock-api.onrender.com',
 ];
 
 const allowedMethods = ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'];
