@@ -6,8 +6,6 @@ const path = require('path');
 
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
-const cors = require('cors');
-
 const helmet = require('helmet');
 
 const { limiter } = require('./middleware/limiter');
@@ -20,6 +18,8 @@ const { errors } = require('celebrate');
 
 const { requestLogger, errorLogger } = require('./middleware/logger');
 
+const corsOptions = require('./middleware/cors');
+
 const { login, createUser } = require('./controllers/users');
 
 const usersRouter = require('./routes/users');
@@ -27,8 +27,6 @@ const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 
 const { auth } = require('./middleware/auth');
-
-const { corsOptions } = require('./middleware/cors');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -40,16 +38,6 @@ app.use(express.json());
 
 app.use(requestLogger);
 
-//FOR RENDER
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
-
-  app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-  );
-}
-//
-
 const validateUrl = (value, helpers) => {
   if (validator.isURL(value)) {
     return value;
@@ -57,13 +45,11 @@ const validateUrl = (value, helpers) => {
   return helpers.error('string.url');
 };
 
+app.use(corsOptions);
+
 app.use(limiter);
 
-app.use(cors());
-
 app.use(helmet());
-
-app.options('*', cors());
 
 app.get('/crash-test', () => {
   setTimeout(() => {
@@ -73,7 +59,7 @@ app.get('/crash-test', () => {
 
 app.post(
   '/signup',
-  corsOptions,
+  // corsOptions,
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
@@ -88,7 +74,7 @@ app.post(
 
 app.post(
   '/signin',
-  corsOptions,
+  // corsOptions,
   celebrate({
     body: Joi.object().keys({
       email: Joi.string().email().required(),
@@ -102,7 +88,7 @@ app.use(auth);
 
 app.use(
   '/users',
-  corsOptions,
+  // corsOptions,
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
@@ -115,7 +101,7 @@ app.use(
 
 app.use(
   '/cards',
-  corsOptions,
+  // corsOptions,
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
@@ -124,6 +110,16 @@ app.use(
   }),
   cardsRouter
 );
+
+//FOR RENDER
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  );
+}
+//
 
 app.use(errorLogger);
 
